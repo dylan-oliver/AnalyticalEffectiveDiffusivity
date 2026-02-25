@@ -409,7 +409,6 @@ set(gca,'ticklabelinterpreter','latex','fontsize',48,'xgrid','on','ygrid','on','
 view([-60,10])
 set(gca,'xgrid','on','ygrid','on','zgrid','on')
 set(gcf,'position',[250,10,1200,1200])
-exportgraphics(gca,'C:/Users/dylan/Dropbox/Dylan/PhD/LaTeX/Paper 3/tmp/Figures/solution_pattern_1.eps','ContentType','vector','BackgroundColor','none')
 
 % y-variant solution
 figure

@@ -7,6 +7,10 @@ clearvars
 close all
 clc
 
+% Adjust path as necessary. Assumes that the folder 'data' exists somewhere
+% (see file genPlots.m); point the path to the directory containing these 
+% folders (or keep as is to create them in the current working directory,
+% if generating fresh data and figures)
 path = pwd();
 
 problemId = 1:9;
@@ -34,8 +38,8 @@ a_idx = [4,4,2,1,1,1,1,1,1];
 n_idx = [6,3,2,2,2,1,1,1,1];
 for id = problemId
 
-    load(['data/approximation_data_problem_',num2str(id),'.mat'],'D_eff_numerical','D_eff_analytical','timers_analytical')
-    load(['data/approximation_data_problem_',num2str(id),'_march.mat'],'D_eff_numerical_march','D_eff_semianalytical_march','timers_march')
+    load([path,'/data/approximation_data_problem_',num2str(id),'.mat'],'D_eff_numerical','D_eff_analytical','timers_analytical')
+    load([path,'/data/approximation_data_problem_',num2str(id),'_march.mat'],'D_eff_numerical_march','D_eff_semianalytical_march','timers_march')
 
     if id == 6
         timers_analytical(end) = [];
@@ -63,3 +67,4 @@ for id = problemId
     set(gcf,'position',[250,10,1200,1200])
 
 end
+

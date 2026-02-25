@@ -1,12 +1,12 @@
-% %% Clear workspace
-% clearvars
-% close all
-% clc
-% 
-% %% Choose problem and corresponding parameters
-% problem = 3;
-% 
-% S = 200;
+%% Clear workspace
+clearvars
+close all
+clc
+
+%% Choose problem and corresponding parameters
+problem = 3;
+
+S = 200;
 
 Sx = S;
 Sy = S;
@@ -514,3 +514,4 @@ set(gca,'ticklabelinterpreter','latex','fontsize',48,'xgrid','on','ygrid','on','
 view([-60,10])
 set(gca,'xgrid','on','ygrid','on','zgrid','on')
 set(gcf,'position',[250,100,1200,800])
+

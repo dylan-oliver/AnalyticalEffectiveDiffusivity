@@ -7,7 +7,11 @@ clearvars
 close all
 clc
 
-path = pwd();
+% Adjust path as necessary. Assumes that the folders 'data' and 'figures' exist
+% somewhere; point the path to the directory containing these folders (or keep
+% as is to create them in the current working directory, if generating fresh data
+% and figures)
+path = pwd(); 
 
 warning('off')
 spparms('piv_tol',0.5)
@@ -69,9 +73,9 @@ if generate
 
         timers_numerical = timer_fvm;
 
-        save(['data/approximation_data_problem_',num2str(id),'.mat'],'D_eff_numerical','D_eff_analytical','timers_numerical','timers_analytical')
-        save(['data/diffusivity_data_problem_',num2str(id),'.mat'],'D','diffusivity_pattern')
-        save(['data/solution_data_problem_',num2str(id),'.mat'],'grid','g','alphay0','alphayW')
+        save([path,'/data/approximation_data_problem_',num2str(id),'.mat'],'D_eff_numerical','D_eff_analytical','timers_numerical','timers_analytical')
+        save([path,'/data/diffusivity_data_problem_',num2str(id),'.mat'],'D','diffusivity_pattern')
+        save([path,'/data/solution_data_problem_',num2str(id),'.mat'],'grid','g','alphay0','alphayW')
 
         disp(['Problem ',num2str(id),' complete...'])
 
@@ -95,9 +99,9 @@ if generate
     timers_numerical = timer_fvm;
     timers_analytical = timer_analytical;
 
-    save('data/approximation_data_problem_5_rectangles.mat','D_eff_numerical','D_eff_analytical','timers_numerical','timers_analytical')
-    save('data/diffusivity_data_problem_5_rectangles.mat','D','diffusivity_pattern')
-    save('data/solution_data_problem_5_rectangles.mat','grid','g','alphay0','alphayW')
+    save([path,'/data/approximation_data_problem_5_rectangles.mat'],'D_eff_numerical','D_eff_analytical','timers_numerical','timers_analytical')
+    save([path,'/data/diffusivity_data_problem_5_rectangles.mat'],'D','diffusivity_pattern')
+    save([path,'/data/solution_data_problem_5_rectangles.mat'],'grid','g','alphay0','alphayW')
 
 end
 
@@ -112,7 +116,7 @@ for id = problemId
 
     figure
     box on
-    load(['data/diffusivity_data_problem_',num2str(id),'.mat'],'diffusivity_pattern')
+    load([path,'/data/diffusivity_data_problem_',num2str(id),'.mat'],'diffusivity_pattern')
     patch(diffusivity_pattern,'facecolor','flat','edgecolor','none')
     xlim([0,1])
     ylim([0,1])
@@ -122,13 +126,13 @@ for id = problemId
     yticklabels({})
     set(gcf,'position',[250,10,1200,1200])
     %set(gcf,'color','none')
-    exportgraphics(gca,[path,'/Figures/diffusivity_pattern_',num2str(id),'.eps'],'ContentType','vector','BackgroundColor','none')
+    exportgraphics(gca,[path,'/figures/diffusivity_pattern_',num2str(id),'.eps'],'ContentType','vector','BackgroundColor','none')
 
-    load(['data/approximation_data_problem_',num2str(id),'.mat'],'D_eff_numerical','D_eff_analytical','timers_analytical')
-    load(['data/approximation_data_problem_',num2str(id),'_march.mat'],'D_eff_numerical_march','D_eff_semianalytical_march','timers_march')
+    load([path,'/data/approximation_data_problem_',num2str(id),'.mat'],'D_eff_numerical','D_eff_analytical','timers_analytical')
+    load([path,'/data/approximation_data_problem_',num2str(id),'_march.mat'],'D_eff_numerical_march','D_eff_semianalytical_march','timers_march')
 
-    createDiffusivityTex([path,'/Data'],['case_',num2str(id),'_analytical'],D_eff_analytical(:,:,end))
-    createDiffusivityTex([path,'/Data'],['case_',num2str(id),'_numerical'],D_eff_numerical)
+    createDiffusivityTex([path,'/data'],['case_',num2str(id),'_analytical'],D_eff_analytical(:,:,end))
+    createDiffusivityTex([path,'/data'],['case_',num2str(id),'_numerical'],D_eff_numerical)
 
     if id == 6
         timers_analytical(end) = [];
@@ -189,7 +193,7 @@ for id = problemId
     set(gca,'ticklabelinterpreter','latex','fontsize',48,'xgrid','on','ygrid','on','zgrid','on','gridcolor','k','yscale','log')
     set(gcf,'position',[250,10,1200,1200])
     %set(gcf,'color','none')
-    exportgraphics(gca,[path,'/Figures/D_eff_differences_',num2str(id),'.eps'],'ContentType','vector','BackgroundColor','none')
+    exportgraphics(gca,[path,'/figures/D_eff_differences_',num2str(id),'.eps'],'ContentType','vector','BackgroundColor','none')
 
 
     figure
@@ -207,21 +211,21 @@ for id = problemId
     set(gca,'ticklabelinterpreter','latex','fontsize',48,'xgrid','on','ygrid','on','zgrid','on','gridcolor','k','yscale','log')
     set(gcf,'position',[250,10,1200,1200])
     %set(gcf,'color','none')
-    exportgraphics(gca,[path,'/Figures/D_eff_timers_',num2str(id),'.eps'],'ContentType','vector','BackgroundColor','none')
+    exportgraphics(gca,[path,'/figures/D_eff_timers_',num2str(id),'.eps'],'ContentType','vector','BackgroundColor','none')
 
 
     [~,idx] = min(norms_analytical);
-    createTex([path,'/Data'],['case_',num2str(id),'_analytical_norm_min_terms'],norms_analytical(idx))
-    createTex([path,'/Data'],['case_',num2str(id),'_analytical_timer_min_terms'],timers_analytical(idx))
+    createTex([path,'/data'],['case_',num2str(id),'_analytical_norm_min_terms'],norms_analytical(idx))
+    createTex([path,'/data'],['case_',num2str(id),'_analytical_timer_min_terms'],timers_analytical(idx))
 
 
     [~,idx] = min(norms_semianalytical_march);
-    createTex([path,'/Data'],['case_',num2str(id),'_semianalytical_norm_min_terms'],norms_semianalytical_march(idx))
-    createTex([path,'/Data'],['case_',num2str(id),'_semianalytical_timer_min_terms'],timers_march(idx))
+    createTex([path,'/data'],['case_',num2str(id),'_semianalytical_norm_min_terms'],norms_semianalytical_march(idx))
+    createTex([path,'/data'],['case_',num2str(id),'_semianalytical_timer_min_terms'],timers_march(idx))
 
 end
 
-load('data/diffusivity_data_problem_5.mat','diffusivity_pattern')
+load([path,'/data/diffusivity_data_problem_5.mat'],'diffusivity_pattern')
 figure
 box on
 patch(diffusivity_pattern,'facecolor','flat','edgecolor','k')
@@ -233,9 +237,9 @@ yticks([])
 yticklabels({})
 set(gcf,'position',[250,10,1200,1200])
 %set(gcf,'color','none')
-exportgraphics(gca,[path,'/Figures/diffusivity_pattern_5_comparison.eps'],'ContentType','vector','BackgroundColor','none')
+exportgraphics(gca,[path,'/figures/diffusivity_pattern_5_comparison.eps'],'ContentType','vector','BackgroundColor','none')
 
-load('data/diffusivity_data_problem_5_rectangles.mat','diffusivity_pattern')
+load([path,'/data/diffusivity_data_problem_5_rectangles.mat'],'diffusivity_pattern')
 figure
 box on
 patch(diffusivity_pattern,'facecolor','flat','edgecolor','k')
@@ -247,19 +251,19 @@ yticks([])
 yticklabels({})
 set(gcf,'position',[250,10,1200,1200])
 %set(gcf,'color','none')
-exportgraphics(gca,[path,'/Figures/diffusivity_pattern_5_rects.eps'],'ContentType','vector','BackgroundColor','none')
+exportgraphics(gca,[path,'/figures/diffusivity_pattern_5_rects.eps'],'ContentType','vector','BackgroundColor','none')
 
 plot_density = 63;
 
 for id = problemId
 
-    load(['data/diffusivity_data_problem_',num2str(id),'.mat'],'D');
+    load([path,'/data/diffusivity_data_problem_',num2str(id),'.mat'],'D');
     D = D{1};
     D(D == 0.1) = 0;
     D(D == 1) = 1;
     image = logical(D);
 
-    load(['data/solution_data_problem_',num2str(id),'.mat'],'grid','g','alphay0','alphayW')
+    load([path,'/data/solution_data_problem_',num2str(id),'.mat'],'grid','g','alphay0','alphayW')
     surface = @(x,y) genSol(grid,g,alphay0,alphayW,x,y);
     x = linspace(0,1,plot_density);
     y = linspace(0,1,plot_density);
@@ -292,44 +296,9 @@ for id = problemId
     set(gca,'xgrid','on','ygrid','on','zgrid','on')
     set(gcf,'position',[250,10,1200,1200])
     %set(gcf,'color','none')
-    exportgraphics(gca,[path,'/Figures/solution_pattern_',num2str(id),'.eps'],'ContentType','vector','BackgroundColor','none')
+    exportgraphics(gca,[path,'/figures/solution_pattern_',num2str(id),'.eps'],'ContentType','vector','BackgroundColor','none')
 
 end
-
-% for id = problemId
-% 
-%     clearvars -except path problemId plot_density id
-% 
-%     load(['data/solution_data_problem_',num2str(id),'.mat'],'grid','g','alphay0','alphayW')
-%     surface = @(x,y) genSol(grid,g,alphay0,alphayW,x,y);
-%     x = linspace(0,1,plot_density);
-%     y = linspace(0,1,plot_density);
-%     z = zeros(plot_density,plot_density);
-%     for i = 1:plot_density
-%         for j = 1:plot_density
-%             z(i,j) = surface(x(j),y(i));
-%         end
-%     end
-%     [x,y] = meshgrid(x,y);
-%     figure
-%     surf(x,y,z,'facecolor','none','edgecolor','flat')
-%     colormap(viridis(1000))
-%     xlim([0,1])
-%     ylim([0,1])
-%     zlim([0,1])
-%     xticks(0:0.2:1)
-%     yticks(0:0.2:1)
-%     zticks(0:0.2:1)
-%     xlabel('$x$','interpreter','latex','fontsize',40)
-%     ylabel('$y$','interpreter','latex','fontsize',40)
-%     zlabel('$u^{(x)}(x,y)$','interpreter','latex','fontsize',40)
-%     set(gca,'ticklabelinterpreter','latex','fontsize',48,'xgrid','on','ygrid','on','zgrid','on','gridcolor','k')
-%     view([-60,10])
-%     set(gca,'xgrid','on','ygrid','on','zgrid','on')
-%     set(gcf,'position',[250,10,1200,1200])
-%     exportgraphics(gca,[path,'/Figures/solution_pattern_',num2str(id),'.eps'],'ContentType','vector','BackgroundColor','none')
-% 
-% end
 
 
 
@@ -396,3 +365,4 @@ fprintf(fid,' \\end{pmatrix}');
 fclose(fid);
 
 end
+
